@@ -1,0 +1,52 @@
+body,
+html {
+    font-family: "Century Gothic", sans-serif;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    background-color: #f7f7f7;
+    overflow-x: hidden; /* Prevents horizontal scroll */
+}
+
+.navbar-custom {
+    background-color: #014fb3;
+    padding: 10px 100px;
+}
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+    color: white;
+    font-size: 15px;
+}
+.navbar-custom .nav-link:hover {
+    color: #ddd;
+}
+
+.widget-container {
+    background-color: #014fb3;
+    width: 400px;
+    height: 120px;
+}
+
+.main-container {
+    margin: 110px 100px;
+}
+
+.table-container {
+    background-color: white;
+    padding: 2rem;
+}
+
+#checkInTable tbody tr,
+#attendanceTable tbody tr {
+    height: 60px;
+    vertical-align: middle;
+}
+
+#checkInTable,
+#attendanceTable {
+    border-bottom-color: transparent !important;
+}
