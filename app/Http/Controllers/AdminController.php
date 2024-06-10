@@ -13,6 +13,11 @@ class AdminController extends Controller
         return view('pages/admin-dashboard');
     }
 
+    public function attendance()
+    {
+        return view('pages/admin-attendance');
+    }
+    
     public function getCheckIns()
     {
         $today = Carbon::today();
@@ -31,6 +36,24 @@ class AdminController extends Controller
                     'user_type' => $attendance->role, // Include user type
                     'today' => $timestamp->gte($today),
                     'thisMonth' => $timestamp->gte($thisMonth)
+                ];
+            });
+
+        return response()->json($attendances);
+    }
+
+    public function getAllAttendance()
+    {
+        $attendances = Attendance::with(['student', 'faculty'])
+            ->get()
+            ->map(function ($attendance) {
+                $timestamp = Carbon::parse($attendance->timestamp);
+                return [
+                    'timestamp' => $timestamp->format('Y-m-d H:i:s'),
+                    'email' => $attendance->student ? $attendance->student->email : ($attendance->faculty ? $attendance->faculty->email : 'N/A'),
+                    'library_user' => $attendance->student ? 'Student' : ($attendance->faculty ? 'Faculty' : 'Guest'),
+                    'id_number' => $attendance->id_number,
+                    'program' => $attendance->program
                 ];
             });
 

@@ -29,13 +29,13 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="#">Dashboard</a>
+              <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
             </li>
             <!-- <li class="nav-item">
               <a class="nav-link" href="#">Analytics</a>
             </li> -->
             <li class="nav-item">
-              <a class="nav-link" href="attendance.html">Attendance</a>
+              <a class="nav-link" href="{{ route('admin.attendance') }}">Attendance</a>
             </li>
           </ul>
         </div>
