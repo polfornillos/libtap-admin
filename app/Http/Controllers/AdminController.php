@@ -22,25 +22,33 @@ class AdminController extends Controller
     {
         $today = Carbon::today();
         $thisMonth = Carbon::now()->startOfMonth();
-
-        $attendances = Attendance::with(['student', 'faculty'])
+    
+        // Fetch check-ins for today
+        $todayAttendances = Attendance::with(['student', 'faculty'])
             ->where('timestamp', '>=', $today)
             ->get()
-            ->map(function ($attendance) use ($today, $thisMonth) {
+            ->map(function ($attendance) {
                 $timestamp = Carbon::parse($attendance->timestamp);
                 return [
                     'name' => $attendance->student ? $attendance->student->f_name . ' ' . $attendance->student->l_name : ($attendance->faculty ? $attendance->faculty->f_name . ' ' . $attendance->faculty->l_name : 'Guest'),
                     'email' => $attendance->student ? $attendance->student->email : ($attendance->faculty ? $attendance->faculty->email : 'N/A'),
                     'program' => $attendance->program,
                     'check_in' => $timestamp->format('Y-m-d H:i:s'),
-                    'user_type' => $attendance->role, // Include user type
-                    'today' => $timestamp->gte($today),
-                    'thisMonth' => $timestamp->gte($thisMonth)
+                    'user_type' => $attendance->role,
+                    'today' => true,
+                    'thisMonth' => false // Placeholder; will not be used in the frontend
                 ];
             });
-
-        return response()->json($attendances);
+    
+        // Count check-ins for this month
+        $monthAttendancesCount = Attendance::where('timestamp', '>=', $thisMonth)->count();
+    
+        return response()->json([
+            'todayAttendances' => $todayAttendances,
+            'monthAttendancesCount' => $monthAttendancesCount
+        ]);
     }
+    
 
     public function getAllAttendance()
     {

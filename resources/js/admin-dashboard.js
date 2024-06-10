@@ -42,8 +42,7 @@ $(document).ready(function () {
                 // Clear the table
                 table.clear();
                 var totalToday = 0;
-                var totalMonth = 0;
-                data.forEach(function (checkIn) {
+                data.todayAttendances.forEach(function (checkIn) {
                     // Add each row to the table
                     table.row.add([
                         checkIn.name,
@@ -52,17 +51,12 @@ $(document).ready(function () {
                         checkIn.program,
                         checkIn.check_in,
                     ]);
-                    if (checkIn.today) {
-                        totalToday++;
-                    }
-                    if (checkIn.thisMonth) {
-                        totalMonth++;
-                    }
+                    totalToday++;
                 });
                 // Redraw the table to display the new data
                 table.draw();
                 $("#totalToday").text(totalToday);
-                $("#totalMonth").text(totalMonth);
+                $("#totalMonth").text(data.monthAttendancesCount);
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
