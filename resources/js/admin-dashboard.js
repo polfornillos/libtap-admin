@@ -14,7 +14,7 @@ window.Echo = new Echo({
 $(document).ready(function () {
     // Initialize DataTable and keep a reference to it
     var table = $("#checkInTable").DataTable({
-        order: [[4, "desc"]],
+        order: [[0, "desc"]],
         paging: false,
         info: false,
         lengthChange: false,
@@ -35,21 +35,20 @@ $(document).ready(function () {
     // Function to load check-in data
     function loadCheckInData() {
         $.ajax({
-            url: window.routeAdminGetCheckIns, // Use the global variable
+            url: window.routeAdminGetCheckIns,
             method: "GET",
             success: function (data) {
-                console.log("Data received:", data); // Log the data received
                 // Clear the table
                 table.clear();
                 var totalToday = 0;
                 data.todayAttendances.forEach(function (checkIn) {
                     // Add each row to the table
                     table.row.add([
+                        checkIn.check_in,
                         checkIn.name,
                         checkIn.email,
                         checkIn.user_type,
                         checkIn.program,
-                        checkIn.check_in,
                     ]);
                     totalToday++;
                 });
@@ -73,7 +72,6 @@ $(document).ready(function () {
     window.Echo.channel("attendance-channel").listen(
         "AttendanceRecorded",
         (e) => {
-            console.log("Event received:", e);
             // Reload data on new attendance
             loadCheckInData();
         }
