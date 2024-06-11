@@ -29,11 +29,11 @@
             <table id="checkInTable" class="table w-100 rounded">
                 <thead>
                     <tr>
+                        <th>Check-in</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>User Type</th>
                         <th>Program</th>
-                        <th>Check-in</th>
                     </tr>
                 </thead>
                 <tbody id="checkInTableBody">

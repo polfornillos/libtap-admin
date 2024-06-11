@@ -35,10 +35,9 @@ $(document).ready(function () {
     // Function to load attendance data
     function loadAttendanceData() {
         $.ajax({
-            url: window.routeAdminGetAllAttendance, // Use the global variable
+            url: window.routeAdminGetAllAttendance,
             method: "GET",
             success: function (data) {
-                console.log("Data received:", data); // Log the data received
                 // Clear the table
                 table.clear();
                 data.forEach(function (attendance) {
@@ -69,7 +68,6 @@ $(document).ready(function () {
     window.Echo.channel("attendance-channel").listen(
         "AttendanceRecorded",
         (e) => {
-            console.log("Event received:", e);
             // Reload data on new attendance
             loadAttendanceData();
         }
