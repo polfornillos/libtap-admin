@@ -39,7 +39,7 @@ class AdminController extends Controller
                     'name' => $attendance->student ? $attendance->student->f_name . ' ' . $attendance->student->l_name : ($attendance->faculty ? $attendance->faculty->f_name . ' ' . $attendance->faculty->l_name : 'Guest'),
                     'email' => $attendance->student ? $attendance->student->email : ($attendance->faculty ? $attendance->faculty->email : 'N/A'),
                     'program' => $attendance->program,
-                    'check_in' => $timestamp->format('Y-m-d H:i:s'),
+                    'timestamp' => $timestamp->format('Y-m-d H:i:s'),
                     'user_type' => $attendance->role,
                     'today' => true,
                     'thisMonth' => false // Placeholder; will not be used in the frontend

@@ -44,7 +44,7 @@ $(document).ready(function () {
                 data.todayAttendances.forEach(function (checkIn) {
                     // Add each row to the table
                     table.row.add([
-                        checkIn.check_in,
+                        checkIn.timestamp,
                         checkIn.name,
                         checkIn.email,
                         checkIn.user_type,
