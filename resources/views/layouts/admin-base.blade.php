@@ -31,11 +31,13 @@
             <li class="nav-item">
               <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
             </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link" href="#">Analytics</a>
-            </li> -->
+
             <li class="nav-item">
               <a class="nav-link" href="{{ route('admin.attendance') }}">Attendance</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ route('admin.logs') }}">Logs</a>
             </li>
           </ul>
         </div>

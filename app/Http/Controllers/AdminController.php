@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Attendance;
+use App\Models\Log;
 use Carbon\Carbon;
 
 class AdminController extends Controller
@@ -18,6 +19,11 @@ class AdminController extends Controller
         return view('pages/admin-attendance');
     }
     
+    public function logs()
+    {
+        return view('pages/admin-logs');
+    }
+
     public function getCheckIns()
     {
         $today = Carbon::today();
@@ -48,7 +54,6 @@ class AdminController extends Controller
             'monthAttendancesCount' => $monthAttendancesCount
         ]);
     }
-    
 
     public function getAllAttendance()
     {
@@ -66,5 +71,21 @@ class AdminController extends Controller
             });
 
         return response()->json($attendances);
+    }
+
+    public function getAllLogs()
+    {
+        $logs = Log::orderBy('timestamp', 'desc')->get()
+            ->map(function ($log) {
+                $timestamp = Carbon::parse($log->timestamp);
+                return [
+                    'timestamp' => $timestamp->format('Y-m-d H:i:s'),
+                    'action' => $log->action,
+                    'description' => $log->description,
+                    'error' => $log->error ? 'Yes' : 'No',
+                ];
+            });
+
+        return response()->json($logs);
     }
 }
