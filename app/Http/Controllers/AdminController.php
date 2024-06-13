@@ -129,12 +129,16 @@ class AdminController extends Controller
             // Map the program to its full name if it exists in the courseMappings array
             if (isset($courseMappings[$program])) {
                 $program = $courseMappings[$program];
+            } elseif ($attendance->faculty) {
+                $program = 'Faculty';
+            } elseif ($attendance->role === 'non-teaching') {
+                $program = 'Non-Teaching';
             }
 
             return [
                 $timestamp->format('m/d/Y H:i:s'),
                 $attendance->student ? $attendance->student->email : ($attendance->faculty ? $attendance->faculty->email : 'N/A'),
-                $attendance->student ? 'Student' : ($attendance->faculty ? 'Faculty' : 'Guest'),
+                $attendance->student ? 'Student' : ($attendance->faculty ? 'Faculty' : 'Non-teaching'),
                 $attendance->id_number,
                 $program
             ];
