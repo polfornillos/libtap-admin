@@ -12,3 +12,5 @@ Route::get('/logs', [AdminController::class, 'logs'])->name('admin.logs');
 Route::get('/admin-get-check-ins', [AdminController::class, 'getCheckIns'])->name('admin.getCheckIns');
 Route::get('/admin-get-all-attendance', [AdminController::class, 'getAllAttendance'])->name('admin.getAllAttendance');
 Route::get('/admin-get-all-logs', [AdminController::class, 'getAllLogs'])->name('admin.getAllLogs');
+
+Route::get('/export-attendance', [AdminController::class, 'exportAttendance'])->name('admin.exportAttendance');

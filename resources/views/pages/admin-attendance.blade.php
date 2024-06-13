@@ -5,7 +5,7 @@
     <div class="table-wrapper pb-5">
         <div class="header-container mb-3 w-100 d-flex justify-content-between align-items-center">
             <h3><strong>ATTENDANCE</strong></h3>
-            <button class="btn btn-primary px-3"><i class="fa-solid fa-file-export me-1"></i> Export</button>
+            <button id="exportButton" class="btn btn-primary px-3"><i class="fa-solid fa-file-export me-1"></i> Export</button>
         </div>
         <div class="table-container rounded">
             <input type="text" id="searchInput" class="form-control mb-3" placeholder="Search..." />
@@ -30,6 +30,8 @@
 
 <script>
     window.routeAdminGetAllAttendance = @json(route('admin.getAllAttendance'));
+    window.routeAdminExportAttendance = @json(route('admin.exportAttendance'));
+
 </script>
 
 @vite(['resources/js/admin-attendance.js'])

@@ -1,6 +1,5 @@
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
-
 // Configure Laravel Echo
 window.Pusher = Pusher;
 
@@ -75,4 +74,30 @@ $(document).ready(function () {
 
     // Periodically refresh the data
     setInterval(loadAttendanceData, 5000); // Refresh every 5 seconds
+
+    // Handle export button click
+    $("#exportButton").click(function () {
+        $.ajax({
+            url: window.routeAdminExportAttendance,
+            method: "GET",
+            success: function (response) {
+                if (response.status === "success") {
+                    Swal.fire({
+                        title: "Success!",
+                        text: "Attendance data has been successfully exported to Google Sheets.",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    title: "Error!",
+                    text: "There was an error exporting the data. Please try again.",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            },
+        });
+    });
 });
