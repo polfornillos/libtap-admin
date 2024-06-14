@@ -67,7 +67,7 @@ class AdminController extends Controller
                     'timestamp' => $timestamp->format('Y-m-d H:i:s'),
                     'email' => $attendance->student ? $attendance->student->email : ($attendance->faculty ? $attendance->faculty->email : 'N/A'),
                     'library_user' => $attendance->student ? 'Student' : ($attendance->faculty ? 'Faculty' : 'Guest'),
-                    'id_number' => $attendance->id_number,
+                    'school_id' => $attendance->school_id,
                     'program' => $attendance->program
                 ];
             });
@@ -139,7 +139,7 @@ class AdminController extends Controller
                 $timestamp->format('m/d/Y H:i:s'),
                 $attendance->student ? $attendance->student->email : ($attendance->faculty ? $attendance->faculty->email : 'N/A'),
                 $attendance->student ? 'Student' : ($attendance->faculty ? 'Faculty' : 'Non-teaching'),
-                $attendance->id_number,
+                $attendance->school_id,
                 $program
             ];
         });

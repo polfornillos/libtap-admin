@@ -45,7 +45,7 @@ $(document).ready(function () {
                         attendance.timestamp,
                         attendance.email,
                         attendance.library_user,
-                        attendance.id_number,
+                        attendance.school_id,
                         attendance.program,
                     ]);
                 });
