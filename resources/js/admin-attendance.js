@@ -22,16 +22,26 @@ $(document).ready(function () {
     });
 
     $("#searchInput").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-        $("#attendanceTable tbody tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-        });
+        filterAttendance();
     });
 
-    // Load initial data
+    // Function to load years for dropdown
+    function loadYearDropdown(data) {
+        let years = new Set();
+        data.forEach(function (attendance) {
+            let year = new Date(attendance.timestamp).getFullYear();
+            years.add(year);
+        });
+
+        $("#year").empty().append(new Option("Year", ""));
+        years.forEach(function (year) {
+            $("#year").append(new Option(year, year));
+        });
+    }
+
+    // Load initial data and populate dropdowns
     loadAttendanceData();
 
-    // Function to load attendance data
     function loadAttendanceData() {
         $.ajax({
             url: window.routeAdminGetAllAttendance,
@@ -51,6 +61,12 @@ $(document).ready(function () {
                 });
                 // Redraw the table to display the new data
                 table.draw();
+
+                // Populate year dropdown
+                loadYearDropdown(data);
+
+                // Store the data for filtering
+                window.attendanceData = data;
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
@@ -63,6 +79,80 @@ $(document).ready(function () {
         });
     }
 
+    function filterAttendance() {
+        let startMonth = $("#startMonth").val();
+        let endMonth = $("#endMonth").val();
+        let year = $("#year").val();
+        let searchValue = $("#searchInput").val().toLowerCase();
+
+        let filteredData = window.attendanceData.filter(function (attendance) {
+            let date = new Date(attendance.timestamp);
+            let attendanceYear = date.getFullYear();
+            let attendanceMonth = String(date.getMonth() + 1).padStart(2, "0");
+            let attendanceText = JSON.stringify(attendance).toLowerCase();
+
+            let isMonthInRange = true;
+            if (startMonth && endMonth) {
+                isMonthInRange =
+                    attendanceMonth >= startMonth &&
+                    attendanceMonth <= endMonth;
+            } else if (startMonth) {
+                isMonthInRange = attendanceMonth >= startMonth;
+            }
+
+            return (
+                (!year || attendanceYear == year) &&
+                isMonthInRange &&
+                (!searchValue || attendanceText.includes(searchValue))
+            );
+        });
+
+        table.clear();
+        filteredData.forEach(function (attendance) {
+            table.row.add([
+                attendance.timestamp,
+                attendance.email,
+                attendance.library_user,
+                attendance.school_id,
+                attendance.program,
+            ]);
+        });
+        table.draw();
+    }
+
+    // Event listeners for dropdowns
+    $("#startMonth").change(function () {
+        let startMonth = $("#startMonth").val();
+        if (startMonth) {
+            $("#endMonth").prop("disabled", false);
+
+            // Enable only the valid options for end month
+            $("#endMonth option").each(function () {
+                if ($(this).val() < startMonth) {
+                    $(this).prop("disabled", true);
+                } else {
+                    $(this).prop("disabled", false);
+                }
+            });
+        } else {
+            $("#endMonth").prop("disabled", true).val("");
+        }
+        filterAttendance();
+    });
+
+    $("#endMonth, #year").change(function () {
+        filterAttendance();
+    });
+
+    // Reset button functionality
+    $("#resetButton").click(function () {
+        $("#startMonth").val("");
+        $("#endMonth").val("").prop("disabled", true);
+        $("#year").val("");
+        $("#searchInput").val("");
+        filterAttendance();
+    });
+
     // Listen for broadcasted events
     window.Echo.channel("attendance-channel").listen(
         "AttendanceRecorded",
@@ -73,7 +163,7 @@ $(document).ready(function () {
     );
 
     // Periodically refresh the data
-    setInterval(loadAttendanceData, 5000); // Refresh every 5 seconds
+    // setInterval(loadAttendanceData, 5000); // Refresh every 5 seconds
 
     // Handle export button click
     $("#exportButton").click(function () {
