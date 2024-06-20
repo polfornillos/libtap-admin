@@ -123,6 +123,7 @@ $(document).ready(function () {
     // Event listeners for dropdowns
     $("#startMonth").change(function () {
         let startMonth = $("#startMonth").val();
+        let endMonth = $("#endMonth").val();
         if (startMonth) {
             $("#endMonth").prop("disabled", false);
 
@@ -134,6 +135,11 @@ $(document).ready(function () {
                     $(this).prop("disabled", false);
                 }
             });
+
+            // Clear end month if it is before the new start month
+            if (endMonth && endMonth < startMonth) {
+                $("#endMonth").val("");
+            }
         } else {
             $("#endMonth").prop("disabled", true).val("");
         }
