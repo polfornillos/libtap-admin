@@ -1,5 +1,6 @@
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
+
 // Configure Laravel Echo
 window.Pusher = Pusher;
 
@@ -171,29 +172,78 @@ $(document).ready(function () {
     // Periodically refresh the data
     // setInterval(loadAttendanceData, 5000); // Refresh every 5 seconds
 
+    // Month mapping
+    const monthNames = {
+        "01": "January",
+        "02": "February",
+        "03": "March",
+        "04": "April",
+        "05": "May",
+        "06": "June",
+        "07": "July",
+        "08": "August",
+        "09": "September",
+        10: "October",
+        11: "November",
+        12: "December",
+    };
+
     // Handle export button click
     $("#exportButton").click(function () {
-        $.ajax({
-            url: window.routeAdminExportAttendance,
-            method: "GET",
-            success: function (response) {
-                if (response.status === "success") {
-                    Swal.fire({
-                        title: "Success!",
-                        text: "Attendance data has been successfully exported to Google Sheets.",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    });
-                }
-            },
-            error: function (xhr, status, error) {
-                Swal.fire({
-                    title: "Error!",
-                    text: "There was an error exporting the data. Please try again.",
-                    icon: "error",
-                    confirmButtonText: "OK",
+        let startMonth = $("#startMonth").val();
+        let endMonth = $("#endMonth").val();
+        let year = $("#year").val();
+
+        let message = "Are you sure you want to export all attendance data?";
+        if (year || startMonth || endMonth) {
+            let range = "";
+            if (startMonth && endMonth) {
+                range = `from ${monthNames[startMonth]} to ${monthNames[endMonth]} `;
+            } else if (startMonth) {
+                range = `from ${monthNames[startMonth]} `;
+            }
+            message = `Are you sure you want to export attendance ${range}${
+                year ? "for " + year : ""
+            }?`;
+        }
+
+        Swal.fire({
+            title: "Confirm Export",
+            text: message,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, export it!",
+            cancelButtonText: "No, cancel",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: window.routeAdminExportAttendance,
+                    method: "GET",
+                    data: {
+                        startMonth: startMonth,
+                        endMonth: endMonth,
+                        year: year,
+                    },
+                    success: function (response) {
+                        if (response.status === "success") {
+                            Swal.fire({
+                                title: "Success!",
+                                text: "Attendance data has been successfully exported to Google Sheets.",
+                                icon: "success",
+                                confirmButtonText: "OK",
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "There was an error exporting the data. Please try again.",
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        });
+                    },
                 });
-            },
+            }
         });
     });
 });
